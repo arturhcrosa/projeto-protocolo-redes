@@ -3,7 +3,7 @@ Este repositório contém o desenvolvimento de uma aplicação distribuída de I
 
 ## 📌 Acordos da Equipe
 - **Clean Code:** Manter o código legível, modular e com variáveis e funções claras.
-- **Documentação Contínua:** Toda funcionalidade implementada deve ser documentada logo em seguida. As decisões de arquitetura e o formato das mensagens do protocolo próprio devem ser registrados imediatamente.
+- **Documentação Contínua:** Toda funcionalidade implementada deve ser documentada logo em seguida.
 
 ## 🗺️ Fases do Desenvolvimento
 O projeto será construído em conjunto por todos os membros, que atuarão em todas as frentes seguindo estas fases:
@@ -15,15 +15,19 @@ O projeto será construído em conjunto por todos os membros, que atuarão em to
 - **Meta de Documentação:** Rascunho do diagrama de arquitetura indicando clientes, servidor e fluxos de comunicação.
 
 ### ⚙️ Fase 2: Aplicação e Protocolo
-- Escolha de um cenário para a aplicação, dentre os possíveis descritos no PDF de requisitos.
+- Escolha de um cenário para a aplicação, dentre os possíveis (descritos no PDF de requisitos).
 - Gerenciamento de requisições HTTP e implementação do canal de comunicação em tempo real.
+- Implementação de um sistema simples de autenticação e identificação dos usuários.
 - Construção da interface gráfica dos clientes.
 - Implementação da persistência de dados e dos alertas.
+- Criação de um arquivo executável com instruções de instalação.
 - **Meta de Documentação:** Detalhamento do protocolo de aplicação próprio (formato da mensagem, campos, sequência de operações e tratamento de erros).
 
 ### 📊 Fase 3: Experimentos e Relatório
+(Olhar PDF de requisitos)
 - Medição de RTT, throughput e testes de concorrência com 1, 2 e 5 clientes.
 - Captura de tráfego real com o Wireshark e análise de conexões, encapsulamento e portas.
+- Criar um vídeo de demonstração com a participação de todos os integrantes (máximo 10 minutos).
 - **Meta de Documentação:** Geração de tabelas, gráficos, e consolidação do relatório técnico em formato PDF.
 
 ## 🛠️ Tecnologias e Bibliotecas
