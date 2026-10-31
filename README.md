@@ -15,6 +15,7 @@ O projeto será construído em conjunto por todos os membros, que atuarão em to
 - **Meta de Documentação:** Rascunho do diagrama de arquitetura indicando clientes, servidor e fluxos de comunicação.
 
 ### ⚙️ Fase 2: Aplicação e Protocolo
+- Escolha de um cenário para a aplicação, dentre os possíveis descritos no PDF de requisitos.
 - Gerenciamento de requisições HTTP e implementação do canal de comunicação em tempo real.
 - Construção da interface gráfica dos clientes.
 - Implementação da persistência de dados e dos alertas.
