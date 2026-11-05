@@ -32,7 +32,7 @@ O projeto será construído em conjunto por todos os membros, que atuarão em to
 
 ## 🛠️ Tecnologias e Bibliotecas
 
-A linguagem escolhida para o desenvolvimento de toda a aplicação foi o **Python**. Essa escolha se justifica por dois motivos principais:
+A linguagem escolhida para o desenvolvimento de toda a aplicação foi o **Python**(Versão: 3.14.4). Essa escolha se justifica por dois motivos principais:
 1. **Foco em Redes:** A familiaridade da equipe com a linguagem permite focar o esforço na criação do protocolo de aplicação próprio e nos experimentos de rede exigidos, em vez de lidar com a curva de aprendizado de uma nova sintaxe.
 2. **Biblioteca Padrão Completa:** O ecossistema nativo do Python atende a todos os requisitos arquiteturais do projeto sem a necessidade de frameworks externos complexos, utilizando as seguintes bibliotecas embutidas:
 
