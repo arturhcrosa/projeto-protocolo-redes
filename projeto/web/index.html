@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de sensores</title>
+<link rel="icon" href="data:,"> <!-- evita o pedido de favicon.ico (erro 404) -->
+<style>
+body { font-family: sans-serif; margin: 16px; }
+table { border-collapse: collapse; margin-bottom: 16px; }
+th, td { border: 1px solid #999; padding: 4px 8px; text-align: left; }
+.alerta { color: #b00020; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Painel de sensores</h1>
+<p>Conexão: <span id="estado">conectando...</span></p>
+<h2>Leituras em tempo real (WebSocket)</h2>
+<table>
+<thead><tr><th>Sensor</th><th>Seq</th><th>Temperatura (°C)</th><th>Hora</th></tr></thead>
+<tbody id="leituras"></tbody>
+</table>
+<h2>Alertas</h2>
+<ul id="alertas"></ul>
+<h2>Histórico (HTTP)</h2>
+<label>Sensor: <input id="sensor" value="s1" size="5"></label>
+<button id="botao-historico">Buscar</button>
+<table>
+<thead><tr><th>Seq</th><th>Temperatura (°C)</th><th>Hora no servidor</th></tr></thead>
+<tbody id="historico"></tbody>
+</table>
+
+<script>
+const estado = document.getElementById("estado");
+
+// Converte segundos desde 1970 (time.time() do Python) em hora legível
+function hora(ts) {
+    return new Date(ts * 1000).toLocaleTimeString("pt-BR");
+}
+
+// Cria uma linha de tabela. textContent impede que o texto vire HTML.
+function novaLinha(tbody, celulas, noTopo) {
+    const linha = noTopo ? tbody.insertRow(0) : tbody.insertRow();
+    for (const texto of celulas) {
+        linha.insertCell().textContent = texto;
+    }
+}
+
+// 1. Tratar cada mensagem que chega do servidor pelo WebSocket
+function tratarMensagem(evento) {
+    const msg = JSON.parse(evento.data);
+    if (msg.type === "reading") {
+        const tbody = document.getElementById("leituras");
+        novaLinha(tbody, [msg.device_id, msg.seq, msg.value.toFixed(2), hora(msg.ts)], true);
+        if (tbody.rows.length > 20) tbody.deleteRow(-1); // mantém só as 20 mais novas
+    } else if (msg.type === "alert") {
+        const item = document.createElement("li");
+        item.className = "alerta";
+        item.textContent = `${hora(msg.ts)}: ${msg.device_id} chegou a ${msg.value.toFixed(2)} °C (limite ${msg.limit} °C)`;
+        document.getElementById("alertas").prepend(item);
+    }
+}
+
+// 2. Abrir o WebSocket no mesmo endereço que serviu esta página
+function conectar() {
+    const ws = new WebSocket(`ws://${location.host}/ws/painel`);
+    ws.onopen = () => { estado.textContent = "conectado"; };
+    ws.onmessage = tratarMensagem;
+    ws.onclose = () => {
+        estado.textContent = "desconectado; nova tentativa em 3 s";
+        setTimeout(conectar, 3000); // servidor fora do ar: tenta de novo
+    };
+}
+conectar();
+
+// 3. Consultar o histórico por HTTP (GET)
+document.getElementById("botao-historico").onclick = async () => {
+    const id = document.getElementById("sensor").value;
+    const tbody = document.getElementById("historico");
+    tbody.innerHTML = "";
+    try {
+        const resposta = await fetch(`/api/historico?device_id=${encodeURIComponent(id)}&limite=20`);
+        if (!resposta.ok) {
+            novaLinha(tbody, [`erro HTTP ${resposta.status}`, "", ""], false);
+            return;
+        }
+        const linhas = await resposta.json();
+        for (const l of linhas) {
+            novaLinha(tbody, [l.seq, l.valor.toFixed(2), hora(l.ts_servidor)], false);
+        }
+    } catch (erro) {
+        novaLinha(tbody, ["servidor fora do ar", "", ""], false);
+    }
+};
+</script>
+</body>
+</html>
